@@ -13,7 +13,6 @@ var Client = {
 				var m = JSON.parse(evt.data)
 				typeFunc = {
 					
-					}
 				}
 				if (typeFunc[m.type] != undefined) {
 					typeFunc[m.type](m.data)
