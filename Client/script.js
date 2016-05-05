@@ -1,4 +1,5 @@
 "use strict";
+
 var Client = {
 	tickRate: 100,
 	connect: function() {
@@ -31,4 +32,4 @@ var Client = {
 }
 var c = Client
 
-get = function(id) {return document.getElementById(id)}
+var get = function(id) {return document.getElementById(id)}
