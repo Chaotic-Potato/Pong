@@ -5,7 +5,6 @@ var Client = {
 		c.loop = setInterval(c.tick, (1000 / c.tickRate))
 		if (c.sock == undefined){
 			c.sock = new WebSocket("ws://potatobox.no-ip.info:7664", 'echo-protocol')
-			c.name = get("name").value
 			get("connect").style.visibility = "hidden"
 			get("canvas").style.visibility = "visible"
 			get("map").style.visibility = "visible"
