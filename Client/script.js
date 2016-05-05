@@ -26,7 +26,7 @@ var Client = {
 	send: function(t, m) {
 		c.sock.send(JSON.stringify({type : t, data : m}))
 	},
-	tick: function() {}
+	tick: function() { }
 }
 var c = Client
 
