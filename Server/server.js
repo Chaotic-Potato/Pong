@@ -38,7 +38,8 @@ var Server = {
 		for (x in s.clients){
 			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
 		}
-	}
+	},
+	tick: function() {}
 }
 
 function decode(string) {
