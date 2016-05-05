@@ -1,3 +1,4 @@
+"use strict";
 var Client = {
 	tickRate: 100,
 	connect: function() {
