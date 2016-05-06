@@ -19,7 +19,7 @@ var Server = {
 				typeFunc = {
 					
 				}
-				if (typeFunc[m.type] != undefined) {
+				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data, con)
 				}
 			})
