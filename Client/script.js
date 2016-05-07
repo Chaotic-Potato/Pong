@@ -31,6 +31,7 @@ var Client = {
 	tick: function() {
 		r.tick()
 	}
+<<<<<<< HEAD
 }
 
 var Render = {
@@ -43,6 +44,20 @@ var Render = {
 	}
 }
 
+=======
+}
+
+var Render = {
+	cvs: document.getElementById("canvas"),
+	ctx: document.getElementById("canvas").getContext("2d"),
+	tick: function() {
+		r.ctx.clearRect(0, 0, 1280, 720)
+		r.ctx.fillStyle = "white"
+		r.ctx.fillRect(100, c.y, 50, 200)
+	}
+}
+
+>>>>>>> master
 var c = Client
 var r = Render
 
