@@ -10,6 +10,7 @@ var Client = {
 			get("canvas").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
+        console.log("Got Message: " + m.data + " with type " + m.type)
 				typeFunc = {
 					
 				}
