@@ -24,13 +24,13 @@ var Server = {
 						  s.updateLobby()
 						}
 						else{
-						  s.send(con, "fatalerror", "Your Username was invalid!")
+						  s.send(con, "fatalError", "Your Username was invalid!")
 						}
 					 },
 					pass: function(data, con){
 						for(i in s.clients){
 						if(s.clients[i].name == con.pair){
-							s.send(s.clients[i], "pairmessage", data)
+							s.send(s.clients[i], "pairMessage", data)
 						}
 						}
 					},
@@ -52,7 +52,7 @@ var Server = {
 			})
 		})
 	},
-	sendall: function(t, m) {
+	sendAll: function(t, m) {
 		for (x in s.clients){
 			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
 		}
