@@ -17,26 +17,26 @@ var Server = {
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
 				typeFunc = {
-          connect: function(data, con){
-            if(s.nameValid(data)){
-              con.name = data
-              s.send(con, "connected", con.name)
-              s.updateLobby()
-            }
-            else{
-              s.send(con, "fatalerror", "Your Username was invalid!")
-            }
-          },
-          pass: function(data, con){
-            for(i in s.clients){
-              if(s.clients[i].name == con.pair){
-                s.send(s.clients[i], "pairmessage", data)
-              }
-            }
-          },
-          pair: function(data, con){
-            con.pair = data
-          }
+					connect: function(data, con){
+						if(s.nameValid(data)){
+						  con.name = data
+						  s.send(con, "connected", con.name)
+						  s.updateLobby()
+						}
+						else{
+						  s.send(con, "fatalerror", "Your Username was invalid!")
+						}
+					 },
+					pass: function(data, con){
+						for(i in s.clients){
+						if(s.clients[i].name == con.pair){
+							s.send(s.clients[i], "pairmessage", data)
+						}
+						}
+					},
+					pair: function(data, con){
+						con.pair = data
+					}
 				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data, con)
