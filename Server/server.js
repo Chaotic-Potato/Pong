@@ -18,6 +18,7 @@ var Server = {
 				w: false,
 				s: false
 			}
+			con.y = 260
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
 				var typeFunc = {
@@ -79,7 +80,18 @@ var Server = {
 		}
 		return true
 	},
-	tick: function() {}
+	tick: function() {
+		for (var i in s.clients) {
+			if (s.clients[i].keys.w && !s.clients[i].keys.s && s.clients[i].y > 0) {
+				s.clients[i].y--
+				console.log(s.clients[i].y)
+			}
+			if (!s.clients[i].keys.w && s.clients[i].keys.s && s.clients[i].y < 520) {
+				s.clients[i].y++
+				console.log(s.clients[i].y)
+			}
+		}
+	}
 }
 
 function decode(string) {
