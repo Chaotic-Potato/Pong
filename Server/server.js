@@ -63,7 +63,15 @@ var Server = {
   updateLobby: function(){
     s.sendall("lobby", s.clients.map(function(a){return a.name}))
   },
-	tick: function() {}
+	tick: function() {},
+  nameValid: function(name){
+    for (var i in s.clients){
+      if (s.clients[i].name == name || name.length > 25){
+        return false
+      }
+    }
+    return true
+  }
 }
 
 function decode(string) {
