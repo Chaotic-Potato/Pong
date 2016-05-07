@@ -1,3 +1,5 @@
+"use strict";
+
 var Client = {
 	tickRate: 100,
 	y: 260,
@@ -13,7 +15,7 @@ var Client = {
 				typeFunc = {
 					
 				}
-				if (typeFunc[m.type] != undefined) {
+				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data)
 				}
 			}
