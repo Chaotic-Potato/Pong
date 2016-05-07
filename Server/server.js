@@ -14,9 +14,13 @@ var Server = {
 		s.wsServer.on('request', function(r) {
 			var con = r.accept('echo-protocol', r.origin)
 			s.clients.push(con)
+			con.keys = {
+				w: false,
+				s: false
+			}
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
-				typeFunc = {
+				var typeFunc = {
 					connect: function(data, con){
 						if(s.nameValid(data)){
 						  con.name = data
@@ -26,7 +30,7 @@ var Server = {
 						else{
 						  s.send(con, "fatalError", "Your Username was invalid!")
 						}
-					 },
+					},
 					pass: function(data, con){
 						for(i in s.clients){
 						if(s.clients[i].name == con.pair){
@@ -36,6 +40,10 @@ var Server = {
 					},
 					pair: function(data, con){
 						con.pair = data
+					},
+					key: function(data, con) {
+						con.keys[data[0]] = data[1]
+						console.log(con.keys)
 					}
 				}
 				if (typeFunc[m.type]) {
@@ -46,29 +54,37 @@ var Server = {
 				for (i in s.clients) {
 					if (s.clients[i] == con) {
 						s.clients.splice(i, 1)
-            s.updateLobby()
+						s.updateLobby()
 					}
 				}
 			})
 		})
 	},
 	sendAll: function(t, m) {
-		for (x in s.clients){
+		for (var x in s.clients){
 			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
 		}
-  },
+	},
 	send: function(c, t, m) {
   	c.sendUTF(JSON.stringify({type : t, data : m}))
 	},
-  updateLobby: function(){
-    s.sendAll("lobby", s.clients)
-  },
+	updateLobby: function(){
+		s.sendAll("lobby", s.clients)
+	},
+	nameValid: function(name) {
+		for (var i in s.clients) {
+			if (s.clients[i].name == name || name.length > 25) {
+				return false
+			}
+		}
+		return true
+	},
 	tick: function() {}
 }
 
 function decode(string) {
 	r = ""
-	for (i in string) {
+	for (var i in string) {
 		r += (string.charAt(i) == "+" ? " " : string.charAt(i))
 	}
 	return decodeURIComponent(r)

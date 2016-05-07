@@ -1,16 +1,20 @@
 var Client = {
 	tickRate: 100,
 	y: 260,
+	keys: {
+		w : false,
+		s : false
+	},
 	connect: function() {
 		if (c.sock == undefined){
 			c.loop = setInterval(c.tick, (1000 / c.tickRate))
-			c.sock = new WebSocket("ws://potatobox.no-ip.info:7664", 'echo-protocol')
+			c.sock = new WebSocket("ws://localhost:7664", 'echo-protocol')
 			c.name = get("name").value
 			get("connect").style.visibility = "hidden"
 			get("canvas").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
-				typeFunc = {
+				var typeFunc = {
 					
 				}
 				if (typeFunc[m.type] != undefined) {
@@ -30,7 +34,27 @@ var Client = {
 	},
 	tick: function() {
 		r.tick()
-	}
+	},
+	keyDown: function(evt) {
+		var key = String.fromCharCode(evt.keyCode).toLowerCase()
+		if (c.keys[key] != undefined) {
+			if (!c.keys[key]) {
+				c.keys[key] = true
+				c.send("key", [key, true])
+			}
+		}
+
+	},
+	keyUp: function(evt) {
+		var key = String.fromCharCode(evt.keyCode).toLowerCase()
+		if (c.keys[key] != undefined) {
+			if (c.keys[key]) {
+				c.keys[key] = false
+				c.send("key", [key, false])
+			}
+		}
+
+	},
 }
 
 var Render = {
@@ -45,5 +69,8 @@ var Render = {
 
 var c = Client
 var r = Render
+
+document.onkeydown = c.keyDown
+document.onkeyup = c.keyUp
 
 var get = function(id) {return document.getElementById(id)}
