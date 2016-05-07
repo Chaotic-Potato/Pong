@@ -51,7 +51,7 @@ var Server = {
 				}
 			})
 			con.on('close', function(r, desc) {
-				for (i in s.clients) {
+				for (var i in s.clients) {
 					if (s.clients[i] == con) {
 						s.clients.splice(i, 1)
 						s.updateLobby()
