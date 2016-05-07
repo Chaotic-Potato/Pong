@@ -1,0 +1,14 @@
+body {
+	background-color: black;
+	color: white;
+}
+
+#canvas {
+	visibility: hidden;
+	position: absolute;
+	top: 10;
+	left: 10;
+	width: 1280;
+	height: 720;
+	border: 1px solid white;
+}
