@@ -5,10 +5,10 @@ var Client = {
 		w : false,
 		s : false
 	},
-	connect: function() {
+	connect: function(master) {
 		if (c.sock == undefined){
 			c.loop = setInterval(c.tick, (1000 / c.tickRate))
-			c.sock = new WebSocket("ws://localhost:7664", 'echo-protocol')
+			c.sock = new WebSocket("ws://" + master + ":7664", 'echo-protocol')
 			c.name = get("name").value
 			get("connect").style.visibility = "hidden"
 			get("canvas").style.visibility = "visible"
