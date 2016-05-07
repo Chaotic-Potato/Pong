@@ -61,7 +61,7 @@ var Server = {
   	c.sendUTF(JSON.stringify({type : t, data : m}))
 	},
   updateLobby: function(){
-    s.sendall("lobby", s.clients)
+    s.sendall("lobby", s.clients.map(function(a){return a.name}))
   },
 	tick: function() {}
 }
