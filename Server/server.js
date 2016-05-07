@@ -16,7 +16,7 @@ var Server = {
 			s.clients.push(con)
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
-				typeFunc = {
+				var typeFunc = {
           connect: function(data, con){
             if(s.nameValid(data)){
               con.name = data
@@ -28,7 +28,7 @@ var Server = {
             }
           },
           pass: function(data, con){
-            for(i in s.clients){
+            for(var i in s.clients){
               if(s.clients[i].name == con.pair){
                 s.send(s.clients[i], "pairmessage", data)
               }
@@ -43,7 +43,7 @@ var Server = {
 				}
 			})
 			con.on('close', function(r, desc) {
-				for (i in s.clients) {
+				for (var i in s.clients) {
 					if (s.clients[i] == con) {
 						s.clients.splice(i, 1)
             s.updateLobby()
@@ -53,7 +53,7 @@ var Server = {
 		})
 	},
 	sendall: function(t, m) {
-		for (x in s.clients){
+		for (var x in s.clients){
 			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
 		}
   },
@@ -68,7 +68,7 @@ var Server = {
 
 function decode(string) {
 	r = ""
-	for (i in string) {
+	for (var i in string) {
 		r += (string.charAt(i) == "+" ? " " : string.charAt(i))
 	}
 	return decodeURIComponent(r)
