@@ -42,10 +42,13 @@ var Server = {
 						})
 					},
 					pair: function(data, con){
-						//Set sender's pair to their new pair
-						con.pair = data
-						//Set the new pair's pair to the sender
-						s.clients.forEach(function(a){if(a.name == data){a.pair = con.name}})
+            var partner = s.getPlayer(data)
+            if(partner && !partner.pair){
+              //Set sender's pair to their new pair
+              con.pair = partner.name
+              //Set the new pair's pair to the sender
+              partner.pair = con.name 
+            }
 					},
 					key: function(data, con) {
 						con.keys[data[0]] = data[1]
@@ -79,9 +82,16 @@ var Server = {
 		s.sendAll("lobby", s.clients.map(function(a){return a.name}))
 	},
 	nameValid: function(name) {
-		// indexOf == -1 means not found
-		return s.clients.indexOf(name) == -1 && name.length < 26
+		return !s.getPlayer(name) && name.length > 0 && name.length < 26
 	},
+  getPlayer: function(name){
+    for(var i in s.clients){
+      if(s.clients[i].name == name){
+        return s.clients[i]
+      }
+    }
+    return null
+  }
 	tick: function() {
 		s.clients.forEach(function(a){
 			if (a.keys.w && !a.keys.s && a.y > 0) {
