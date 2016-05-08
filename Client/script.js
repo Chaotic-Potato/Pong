@@ -14,13 +14,13 @@ var Client = {
 			get("canvas").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
-        m.type = m.type.toLowerCase()
-        console.log("Got Message: (" + m.data + " :: " + m.type + ")")
+				m.type = m.type.toLowerCase()
+				console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
-          fatalerror: function(data){
-            alert(data)
-            setTimeout(location.reload(true), 3000)
-          }
+					fatalerror: function(data){
+						alert(data)
+						setTimeout(location.reload(true), 3000)
+					}
 				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data)
@@ -35,10 +35,10 @@ var Client = {
 		}
 	},
 	send: function(t, m) {
-    console.log("Sending Message: (" + m + " :: " + t + ")")
+		console.log("Sending Message: (" + m + " :: " + t + ")")
 		c.sock.send(JSON.stringify({type : t, data : m}))
 	},
-  //Nest an extra layer when we pass
+	//Nest an extra layer when we pass
 	pairSend: function(t, m) {
 		c.send("pass", {type: t, data: m})
 	},
@@ -48,16 +48,16 @@ var Client = {
 	keyDown: function(evt) {
 		var key = String.fromCharCode(evt.keyCode).toLowerCase()
 		if (c.keys[key] === false) {
-      c.keys[key] = true
-      c.pairSend("key", {key: key, state: true})
+			c.keys[key] = true
+			c.pairSend("key", {key: key, state: true})
 		}
 
 	},
 	keyUp: function(evt) {
 		var key = String.fromCharCode(evt.keyCode).toLowerCase()
 		if (c.keys[key] === true) {
-      c.keys[key] = false
-      c.pairSend("key", {key: key, state: false})
+			c.keys[key] = false
+			c.pairSend("key", {key: key, state: false})
 		}
 
 	},
