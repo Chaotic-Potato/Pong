@@ -47,21 +47,17 @@ var Client = {
 	},
 	keyDown: function(evt) {
 		var key = String.fromCharCode(evt.keyCode).toLowerCase()
-		if (c.keys[key] != undefined) {
-			if (!c.keys[key]) {
-				c.keys[key] = true
-				c.send("key", [key, true])
-			}
+		if (c.keys[key] === false) {
+      c.keys[key] = true
+      c.pairSend("key", {key: key, state: true})
 		}
 
 	},
 	keyUp: function(evt) {
 		var key = String.fromCharCode(evt.keyCode).toLowerCase()
-		if (c.keys[key] != undefined) {
-			if (c.keys[key]) {
-				c.keys[key] = false
-				c.send("key", [key, false])
-			}
+		if (c.keys[key] === true) {
+      c.keys[key] = false
+      c.pairSend("key", {key: key, state: false})
 		}
 
 	},

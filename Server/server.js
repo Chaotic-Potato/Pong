@@ -42,7 +42,10 @@ var Server = {
 						})
 					},
 					pair: function(data, con){
+            //Set sender's pair to their new pair
 						con.pair = data
+            //Set the new pair's pair to the sender
+            s.clients.forEach(function(a){if(a.name == data){a.pair = con.name}})
 					},
 					key: function(data, con) {
 						con.keys[data[0]] = data[1]
@@ -64,9 +67,9 @@ var Server = {
 		})
 	},
 	sendAll: function(t, m) {
-		for (var x in s.clients){
-			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
-		}
+		s.clients.forEach(function(a){
+			a.sendUTF(JSON.stringify({type : t, data : m}))
+		})
 	},
 	send: function(c, t, m) {
     console.log("Sending message: (" + m + " :: " + t + ") to client " + c.name)
@@ -76,24 +79,20 @@ var Server = {
 		s.sendAll("lobby", s.clients.map(function(a){return a.name}))
 	},
 	nameValid: function(name) {
-		for (var i in s.clients) {
-			if (s.clients[i].name == name || name.length > 25) {
-				return false
-			}
-		}
-		return true
+    // indexOf == -1 means not found
+    return s.clients.indexOf(name) == -1 && name.length < 26
 	},
 	tick: function() {
-		for (var i in s.clients) {
-			if (s.clients[i].keys.w && !s.clients[i].keys.s && s.clients[i].y > 0) {
-				s.clients[i].y--
-				console.log(s.clients[i].y)
+		s.clients.forEach(function(a){
+			if (a.keys.w && !a.keys.s && a.y > 0) {
+				a.y--
+				console.log(a.y)
 			}
-			if (!s.clients[i].keys.w && s.clients[i].keys.s && s.clients[i].y < 520) {
-				s.clients[i].y++
-				console.log(s.clients[i].y)
+			if (!a.keys.w && a.keys.s && a.y < 520) {
+				a.y++
+				console.log(a.y)
 			}
-		}
+		})
 	}
 }
 
