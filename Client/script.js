@@ -14,7 +14,8 @@ var Client = {
 			get("canvas").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
-        console.log("Got Message: " + m.data + " with type " + m.type)
+        m.type = m.type.toLowerCase()
+        console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
 					
 				}
@@ -31,6 +32,7 @@ var Client = {
 		}
 	},
 	send: function(t, m) {
+    console.log("Sending Message: (" + m + " :: " + t + ")")
 		c.sock.send(JSON.stringify({type : t, data : m}))
 	},
 	tick: function() {

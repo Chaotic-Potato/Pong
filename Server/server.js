@@ -21,15 +21,17 @@ var Server = {
 			con.y = 260
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
+        m.type = m.type.toLowerCase()
+        console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
 					connect: function(data, con){
 						if(s.nameValid(data)){
 						  con.name = data
-						  s.send(con, "connected", con.name)
+						  s.send(con, "Connected", con.name)
 						  s.updateLobby()
 						}
 						else{
-						  s.send(con, "fatalError", "Your Username was invalid!")
+						  s.send(con, "FatalError", "Your Username was invalid!")
 						}
 					},
 					pass: function(data, con){
@@ -67,6 +69,7 @@ var Server = {
 		}
 	},
 	send: function(c, t, m) {
+    console.log("Sending message: (" + m + " :: " + t + ") to client " + c.name)
   	c.sendUTF(JSON.stringify({type : t, data : m}))
 	},
 	updateLobby: function(){
