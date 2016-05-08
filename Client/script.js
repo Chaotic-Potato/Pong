@@ -17,7 +17,10 @@ var Client = {
         m.type = m.type.toLowerCase()
         console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
-					
+          fatalerror: function(data){
+            alert(data)
+            setTimeout(location.reload(true), 3000)
+          }
 				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data)
@@ -34,6 +37,10 @@ var Client = {
 	send: function(t, m) {
     console.log("Sending Message: (" + m + " :: " + t + ")")
 		c.sock.send(JSON.stringify({type : t, data : m}))
+	},
+  //Nest an extra layer when we pass
+	pairSend: function(t, m) {
+		c.send("pass", {type: t, data: m})
 	},
 	tick: function() {
 		r.tick()
