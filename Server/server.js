@@ -50,6 +50,7 @@ var Server = {
 							partner.pair = con.name 
 							s.send(partner,"paired",con.name)
 							s.send(con,"paired",partner.name)
+              s.updateLobby()
 						}
 					}
 				}
@@ -77,7 +78,7 @@ var Server = {
 		c.sendUTF(JSON.stringify({type : t, data : m}))
 	},
 	updateLobby: function(){
-		s.sendAll("lobby", s.clients.map(function(a){return a.name}))
+		s.sendAll("lobby", s.clients.filter(function(a){return a.pair == undefined}).map(function(a){return a.name}))
 	},
 	nameValid: function(name) {
 		return !s.getPlayer(name) && name.length > 0 && name.length < 26
