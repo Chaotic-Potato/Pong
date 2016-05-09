@@ -50,12 +50,8 @@ var Server = {
               partner.pair = con.name 
               s.send(partner,"paired",con.name)
             }
-					},
-					key: function(data, con) {
-						con.keys[data[0]] = data[1]
-						console.log(con.keys)
 					}
-				}
+        }
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data, con)
 				}
