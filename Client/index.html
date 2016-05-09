@@ -1,18 +1,21 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Pong</title>
+		<title>| PONG |</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body id="body">
-		<div id="connect">
-			<span>Name: </span>
-			<input id="name">
-			<button onclick="c.connect('potatobox.no-ip.info')">Connect Potato Box</button>
-			<button onclick="c.connect('localhost')">Connect Local</button>
+		<h1>PONG</h1>
+		<div id="game" class="center">
+			<canvas id="canvas" width="1280" height="720"></canvas>
 		</div>
-		<canvas id="canvas" width="1280" height="720"></canvas>
 		<ul id="lobby"></ul>
+		<div id="connect" class="center">
+			<span>NAME: </span>
+			<input id="name">
+			<button onclick="c.connect('potatobox.no-ip.info')">CON PB</button>
+			<button onclick="c.connect('localhost')">CON LOC</button>
+		</div>
 		<script src="script.js"></script>
 	</body>
 </html>
