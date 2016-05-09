@@ -83,7 +83,6 @@ var Client = {
 	pair: function(name){
 		c.send('pair',name)
 		c.move(c.y)//Update initial position
-		document.getElementById("lobby").style.visibility = "hidden"
 	}
 }
 

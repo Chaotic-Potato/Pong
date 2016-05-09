@@ -49,6 +49,7 @@ var Server = {
 							//Set the new pair's pair to the sender
 							partner.pair = con.name 
 							s.send(partner,"paired",con.name)
+							s.send(con,"paired",partner.name)
 						}
 					}
 				}
