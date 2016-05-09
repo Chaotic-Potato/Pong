@@ -1,5 +1,5 @@
 var Client = {
-  pair: {y:260, name: ""},
+	pair: {y:260, name: ""},
 	tickRate: 100,
 	y: 260,
 	keys: {
@@ -22,22 +22,22 @@ var Client = {
 						alert(data)
 						setTimeout(location.reload(true), 3000)
 					},
-          move: function(data){
-            c.pair.y = data
-          },
-          lobby: function(data){
-            var lobbyList = document.getElementById("lobby")
-            lobbyList.innerHTML = ""
-            data.forEach(function(a){
-              var newelem = document.createElement("li")
-              newelem.innerHTML = "<button onclick = \"c.pair('" + a + "')\">" + a + "</button>"
-              lobbyList.appendChild(newelem)
-            })
-          },
-          paired: function(data){
-            c.move(c.y)
-            document.getElementById("lobby").style.visibility = "hidden"
-          }
+					move: function(data){
+						c.pair.y = data
+					},
+					lobby: function(data){
+						var lobbyList = document.getElementById("lobby")
+						lobbyList.innerHTML = ""
+						data.forEach(function(a){
+							var newelem = document.createElement("li")
+							newelem.innerHTML = "<button onclick = \"c.pair('" + a + "')\">" + a + "</button>"
+							lobbyList.appendChild(newelem)
+						})
+					},
+					paired: function(data){
+						c.move(c.y)
+						document.getElementById("lobby").style.visibility = "hidden"
+					}
 				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data)
@@ -61,29 +61,29 @@ var Client = {
 	},
 	tick: function() {
 		r.tick()
-    c.processMove()
+		c.processMove()
 	},
-  processMove: function(){
-    if(c.keys.w && !c.keys.s){c.move(c.y - 3)}
-    if(!c.keys.w && c.keys.s){c.move(c.y + 3)}
-  },
-  keyDown: function(evt) {
-    var key = String.fromCharCode(evt.keyCode).toLowerCase()
-    if (c.keys[key] === false) {c.keys[key] = true}
-  },
-  keyUp: function(evt) {
-    var key = String.fromCharCode(evt.keyCode).toLowerCase()
-    if (c.keys[key] === true) {c.keys[key] = false}
-  },
-  move: function(newy){
-    c.pairSend("move", newy)
-    c.y = newy
-  },
-  pair: function(name){
-    c.send('pair',name)
-    c.move(c.y)//Update initial position
-    document.getElementById("lobby").style.visibility = "hidden"
-  }
+	processMove: function(){
+		if(c.keys.w && !c.keys.s){c.move(c.y - 3)}
+		if(!c.keys.w && c.keys.s){c.move(c.y + 3)}
+	},
+	keyDown: function(evt) {
+		var key = String.fromCharCode(evt.keyCode).toLowerCase()
+		if (c.keys[key] === false) {c.keys[key] = true}
+	},
+	keyUp: function(evt) {
+		var key = String.fromCharCode(evt.keyCode).toLowerCase()
+		if (c.keys[key] === true) {c.keys[key] = false}
+	},
+	move: function(newy){
+		c.pairSend("move", newy)
+		c.y = newy
+	},
+	pair: function(name){
+		c.send('pair',name)
+		c.move(c.y)//Update initial position
+		document.getElementById("lobby").style.visibility = "hidden"
+	}
 }
 
 var Render = {

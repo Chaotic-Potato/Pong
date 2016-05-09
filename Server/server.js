@@ -42,16 +42,16 @@ var Server = {
 						})
 					},
 					pair: function(data, con){
-            var partner = s.getPlayer(data)
-            if(partner && !partner.pair && con.name != partner.name){
-              //Set sender's pair to their new pair
-              con.pair = partner.name
-              //Set the new pair's pair to the sender
-              partner.pair = con.name 
-              s.send(partner,"paired",con.name)
-            }
+						var partner = s.getPlayer(data)
+						if(partner && !partner.pair && con.name != partner.name){
+							//Set sender's pair to their new pair
+							con.pair = partner.name
+							//Set the new pair's pair to the sender
+							partner.pair = con.name 
+							s.send(partner,"paired",con.name)
+						}
 					}
-        }
+				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data, con)
 				}
@@ -81,14 +81,14 @@ var Server = {
 	nameValid: function(name) {
 		return !s.getPlayer(name) && name.length > 0 && name.length < 26
 	},
-  getPlayer: function(name){
-    for(var i in s.clients){
-      if(s.clients[i].name == name){
-        return s.clients[i]
-      }
-    }
-    return null
-  },
+	getPlayer: function(name){
+		for(var i in s.clients){
+			if(s.clients[i].name == name){
+				return s.clients[i]
+			}
+		}
+		return null
+	},
 	tick: function() {
 		s.clients.forEach(function(a){
 			if (a.keys.w && !a.keys.s && a.y > 0) {

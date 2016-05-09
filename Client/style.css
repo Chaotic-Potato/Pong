@@ -11,5 +11,5 @@ body {
 	width: 1280;
 	height: 720;
 	border: 1px solid white;
-  z-index: -100;
+	z-index: -100;
 }
