@@ -65,8 +65,16 @@ var Client = {
 		c.processMove()
 	},
 	processMove: function(){
-		if(c.keys.w && !c.keys.s){c.move(c.y - 3)}
-		if(!c.keys.w && c.keys.s){c.move(c.y + 3)}
+		if(c.keys.w && !c.keys.s){
+			if (c.y > 2) {
+				c.move(c.y - 3)
+			} 
+		}
+		if(!c.keys.w && c.keys.s){
+			if (c.y < 518) {
+				c.move(c.y + 3)
+			} 
+		}
 	},
 	keyDown: function(evt) {
 		var key = String.fromCharCode(evt.keyCode).toLowerCase()
@@ -93,7 +101,7 @@ var Render = {
 		r.ctx.clearRect(0, 0, 1280, 720)
 		r.ctx.fillStyle = "white"
 		r.ctx.fillRect(100, c.y, 50, 200)
-		r.ctx.fillRect(1180, c.pair.y, 50, 200)
+		r.ctx.fillRect(1130, c.pair.y, 50, 200)
 	}
 }
 
