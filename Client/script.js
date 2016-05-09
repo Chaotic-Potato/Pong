@@ -2,6 +2,7 @@ var Client = {
 	pair: {y:260, name: ""},
 	tickRate: 100,
 	y: 260,
+	lobby: [],
 	keys: {
 		w : false,
 		s : false
