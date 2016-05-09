@@ -43,11 +43,12 @@ var Server = {
 					},
 					pair: function(data, con){
             var partner = s.getPlayer(data)
-            if(partner && !partner.pair){
+            if(partner && !partner.pair && con.name != partner.name){
               //Set sender's pair to their new pair
               con.pair = partner.name
               //Set the new pair's pair to the sender
               partner.pair = con.name 
+              s.send(partner,"paired",con.name)
             }
 					},
 					key: function(data, con) {
@@ -91,7 +92,7 @@ var Server = {
       }
     }
     return null
-  }
+  },
 	tick: function() {
 		s.clients.forEach(function(a){
 			if (a.keys.w && !a.keys.s && a.y > 0) {
