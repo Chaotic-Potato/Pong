@@ -23,6 +23,6 @@
   - Data is user-presentable string telling what went wrong
 
 ##Client -> Client
-- Key
-  - Remote client has changed key state
-  - Data is {key: keyPressed, state: keyState} 
+- Move
+  - Client has moved to a new y-value
+  - Data is new y-value
