@@ -101,7 +101,7 @@ var Render = {
 		r.ctx.clearRect(0, 0, 1280, 720)
 		r.ctx.fillStyle = "white"
 		r.ctx.fillRect(100, c.y, 50, 200)
-		r.ctx.fillRect(1180, c.pair.y, 50, 200)
+		r.ctx.fillRect(1130, c.pair.y, 50, 200)
 	}
 }
 
