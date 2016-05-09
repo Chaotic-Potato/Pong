@@ -65,16 +65,8 @@ var Client = {
 		c.processMove()
 	},
 	processMove: function(){
-		if(c.keys.w && !c.keys.s){
-			if (c.y > 2) {
-				c.move(c.y - 3)
-			} 
-		}
-		if(!c.keys.w && c.keys.s){
-			if (c.y < 518) {
-				c.move(c.y + 3)
-			} 
-		}
+		if(c.keys.w && !c.keys.s && c.y > 2){c.move(c.y - 3)}
+		if(!c.keys.w && c.keys.s && c.y < 518){c.move(c.y + 3)}
 	},
 	keyDown: function(evt) {
 		var key = String.fromCharCode(evt.keyCode).toLowerCase()
