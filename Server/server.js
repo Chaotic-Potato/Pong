@@ -34,9 +34,9 @@ var Server = {
 					},
 					pass: function(data, con){
 						for(i in s.clients){
-						if(s.clients[i].name == con.pair){
-							s.send(s.clients[i], "pairMessage", data)
-						}
+							if(s.clients[i].name == con.pair){
+								s.send(s.clients[i], "pairMessage", data)
+							}
 						}
 					},
 					pair: function(data, con){

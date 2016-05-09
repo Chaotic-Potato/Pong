@@ -1,6 +1,7 @@
 var Client = {
 	tickRate: 100,
 	y: 260,
+	lobby: [],
 	keys: {
 		w : false,
 		s : false
@@ -14,9 +15,11 @@ var Client = {
 			get("canvas").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
-        console.log("Got Message: " + m.data + " with type " + m.type)
+				console.log("Got Message: " + m.data + " with type " + m.type)
 				var typeFunc = {
-					
+					lobby: function(data) {
+						c.lobby = data
+					}
 				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data)
