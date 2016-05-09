@@ -1,11 +1,11 @@
 "use strict";
 var Server = {
-  clients: [], 
+	clients: [], 
 	tickRate: 100,
 	init: function() {
 		s.loop = setInterval(s.tick, (1000 / s.tickRate))
 		s.WebSocketServer = require('websocket').server
-		s.http =  require("http") 
+		s.http =	require("http") 
 		s.server = s.http.createServer(function(res, req){}).listen(7664)
 		s.wsServer = new s.WebSocketServer({
 			httpServer: s.server,
@@ -21,26 +21,35 @@ var Server = {
 			con.y = 260
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
+				m.type = m.type.toLowerCase()
+				console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
 					connect: function(data, con){
 						if(s.nameValid(data)){
-						  con.name = data
-						  s.send(con, "connected", con.name)
-						  s.updateLobby()
+							con.name = data
+							s.send(con, "Connected", con.name)
+							s.updateLobby()
 						}
 						else{
-						  s.send(con, "fatalError", "Your Username was invalid!")
+							s.send(con, "FatalError", "Your Username was invalid!")
 						}
 					},
-					pass: function(data, con){
-						for(i in s.clients){
-							if(s.clients[i].name == con.pair){
-								s.send(s.clients[i], "pairMessage", data)
+					pass: function(forwardMessage, con){
+						s.clients.forEach(function(a){
+							if(a.name == con.pair){
+								s.send(a, forwardMessage.type, forwardMessage.data)
 							}
-						}
+						})
 					},
 					pair: function(data, con){
-						con.pair = data
+            var partner = s.getPlayer(data)
+            if(partner && !partner.pair && con.name != partner.name){
+              //Set sender's pair to their new pair
+              con.pair = partner.name
+              //Set the new pair's pair to the sender
+              partner.pair = con.name 
+              s.send(partner,"paired",con.name)
+            }
 					},
 					key: function(data, con) {
 						con.keys[data[0]] = data[1]
@@ -62,35 +71,39 @@ var Server = {
 		})
 	},
 	sendAll: function(t, m) {
-		for (var x in s.clients){
-			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
-		}
+		s.clients.forEach(function(a){
+			a.sendUTF(JSON.stringify({type : t, data : m}))
+		})
 	},
 	send: function(c, t, m) {
-  	c.sendUTF(JSON.stringify({type : t, data : m}))
+		console.log("Sending message: (" + m + " :: " + t + ") to client " + c.name)
+		c.sendUTF(JSON.stringify({type : t, data : m}))
 	},
 	updateLobby: function(){
 		s.sendAll("lobby", s.clients.map(function(a){return a.name}))
 	},
 	nameValid: function(name) {
-		for (var i in s.clients) {
-			if (s.clients[i].name == name || name.length > 25) {
-				return false
-			}
-		}
-		return true
+		return !s.getPlayer(name) && name.length > 0 && name.length < 26
 	},
+  getPlayer: function(name){
+    for(var i in s.clients){
+      if(s.clients[i].name == name){
+        return s.clients[i]
+      }
+    }
+    return null
+  },
 	tick: function() {
-		for (var i in s.clients) {
-			if (s.clients[i].keys.w && !s.clients[i].keys.s && s.clients[i].y > 0) {
-				s.clients[i].y--
-				console.log(s.clients[i].y)
+		s.clients.forEach(function(a){
+			if (a.keys.w && !a.keys.s && a.y > 0) {
+				a.y--
+				console.log(a.y)
 			}
-			if (!s.clients[i].keys.w && s.clients[i].keys.s && s.clients[i].y < 520) {
-				s.clients[i].y++
-				console.log(s.clients[i].y)
+			if (!a.keys.w && a.keys.s && a.y < 520) {
+				a.y++
+				console.log(a.y)
 			}
-		}
+		})
 	}
 }
 
