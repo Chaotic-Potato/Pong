@@ -25,6 +25,10 @@ ul {
 	list-style-type: square;
 }
 
+#name {
+	width: 150;
+}
+
 h1 {
 	display: flex;
 	justify-content: center;
