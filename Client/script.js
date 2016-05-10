@@ -14,6 +14,7 @@ var Client = {
 			c.name = get("name").value
 			get("connectContainer").style.visibility = "hidden"
 			get("game").style.visibility = "visible"
+			get("lobby").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
 				m.type = m.type.toLowerCase()
