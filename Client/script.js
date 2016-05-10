@@ -28,11 +28,13 @@ var Client = {
 					},
 					lobby: function(data){
 						var lobbyList = document.getElementById("lobby")
-						lobbyList.innerHTML = ""
+						lobbyList.innerHTML = "<span>PLAYERS</span>"
 						data.forEach(function(a){
-							var newelem = document.createElement("li")
-							newelem.innerHTML = "<button onclick = \"c.pair('" + a + "')\">" + a + "</button>"
-							lobbyList.appendChild(newelem)
+							if (a != c.name) {
+								var newelem = document.createElement("li")
+								newelem.innerHTML = "<button onclick = \"c.pair('" + a + "')\">" + a + "</button>"
+								lobbyList.appendChild(newelem)
+							}
 						})
 					},
 					paired: function(data){
