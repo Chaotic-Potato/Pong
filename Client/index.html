@@ -1,16 +1,26 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Pong</title>
+		<title>| PONG |</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body id="body">
-		<div id="connect">
-			<span>Name: </span>
-			<input id="name">
-			<button onclick="c.connect()">Connect</button>
+		<h1>PONG</h1>
+		<div id="game" class="center">
+			<canvas id="canvas" width="1280" height="720"></canvas>
 		</div>
-		<canvas id="canvas" width="1280" height="720"></canvas>
+		<div id="lobbyContainer" class="center">
+			<ul id="lobby">
+			</ul>
+		</div>
+		<div id="connectContainer" class="center">
+			<div id="connect">
+				<span>NAME: </span>
+				<input id="name">
+				<button onclick="c.connect('potatobox.no-ip.info')">CON PB</button>
+				<button onclick="c.connect('localhost')">CON LOC</button>
+			</div>
+		</div>
 		<script src="script.js"></script>
 	</body>
 </html>

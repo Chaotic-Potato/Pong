@@ -1,11 +1,11 @@
 "use strict";
 var Server = {
-  clients: [], 
+	clients: [], 
 	tickRate: 100,
 	init: function() {
 		s.loop = setInterval(s.tick, (1000 / s.tickRate))
 		s.WebSocketServer = require('websocket').server
-		s.http =  require("http") 
+		s.http = require("http") 
 		s.server = s.http.createServer(function(res, req){}).listen(7664)
 		s.wsServer = new s.WebSocketServer({
 			httpServer: s.server,
@@ -14,61 +14,100 @@ var Server = {
 		s.wsServer.on('request', function(r) {
 			var con = r.accept('echo-protocol', r.origin)
 			s.clients.push(con)
+			con.keys = {
+				w: false,
+				s: false
+			}
+			con.y = 260
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
-				typeFunc = {
-          connect: function(data, con){
-            if(s.nameValid(data)){
-              con.name = data
-              s.send(con, "connected", con.name)
+				m.type = m.type.toLowerCase()
+				console.log("Got Message: (" + m.data + " :: " + m.type + ")")
+				var typeFunc = {
+					connect: function(data, con){
+						if(s.nameValid(data)){
+							con.name = data
+							s.send(con, "Connected", con.name)
+							s.updateLobby()
+						}
+						else{
+							s.send(con, "FatalError", "Your Username was invalid!")
+						}
+					},
+					pass: function(forwardMessage, con){
+						s.clients.forEach(function(a){
+							if(a.name == con.pair){
+								s.send(a, forwardMessage.type, forwardMessage.data)
+							}
+						})
+					},
+					pair: function(data, con){
+						var partner = s.getPlayer(data)
+						if(partner && !partner.pair && con.name != partner.name){
+							//Set sender's pair to their new pair
+							con.pair = partner.name
+							//Set the new pair's pair to the sender
+							partner.pair = con.name 
+							s.send(partner,"paired",con.name)
+							s.send(con,"paired",partner.name)
               s.updateLobby()
-            }
-            else{
-              s.send(con, "fatalerror", "Your Username was invalid!")
-            }
-          },
-          pass: function(data, con){
-            for(i in s.clients){
-              if(s.clients[i].name == con.pair){
-                s.send(s.clients[i], "pairmessage", data)
-              }
-            }
-          },
-          pair: function(data, con){
-            con.pair = data
-          }
+						}
+					}
 				}
 				if (typeFunc[m.type]) {
 					typeFunc[m.type](m.data, con)
 				}
 			})
 			con.on('close', function(r, desc) {
-				for (i in s.clients) {
+				for (var i in s.clients) {
 					if (s.clients[i] == con) {
 						s.clients.splice(i, 1)
-            s.updateLobby()
+						s.updateLobby()
 					}
 				}
 			})
 		})
 	},
-	sendall: function(t, m) {
-		for (x in s.clients){
-			s.clients[x].sendUTF(JSON.stringify({type : t, data : m}))
-		}
-  },
-	send: function(c, t, m) {
-  	c.sendUTF(JSON.stringify({type : t, data : m}))
+	sendAll: function(t, m) {
+		s.clients.forEach(function(a){
+			a.sendUTF(JSON.stringify({type : t, data : m}))
+		})
 	},
-  updateLobby: function(){
-    s.sendall("lobby", s.clients)
-  },
-	tick: function() {}
+	send: function(c, t, m) {
+		console.log("Sending message: (" + m + " :: " + t + ") to client " + c.name)
+		c.sendUTF(JSON.stringify({type : t, data : m}))
+	},
+	updateLobby: function(){
+		s.sendAll("lobby", s.clients.filter(function(a){return a.pair == undefined}).map(function(a){return a.name}))
+	},
+	nameValid: function(name) {
+		return !s.getPlayer(name) && name.length > 0 && name.length < 26
+	},
+	getPlayer: function(name){
+		for(var i in s.clients){
+			if(s.clients[i].name == name){
+				return s.clients[i]
+			}
+		}
+		return null
+	},
+	tick: function() {
+		s.clients.forEach(function(a){
+			if (a.keys.w && !a.keys.s && a.y > 0) {
+				a.y--
+				console.log(a.y)
+			}
+			if (!a.keys.w && a.keys.s && a.y < 520) {
+				a.y++
+				console.log(a.y)
+			}
+		})
+	}
 }
 
 function decode(string) {
 	r = ""
-	for (i in string) {
+	for (var i in string) {
 		r += (string.charAt(i) == "+" ? " " : string.charAt(i))
 	}
 	return decodeURIComponent(r)

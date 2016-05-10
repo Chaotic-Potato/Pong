@@ -1,18 +1,69 @@
 body {
 	background-color: black;
 	color: white;
+	
+}
+
+* {
+	font-family: pixel;
+	font-size: 24;
+	background-color: black;
+	color: white;
+}
+
+div {
+	background-color: transparent;
+}
+
+@font-face {
+  font-family: pixel;
+  src: url(PressStart2P-Regular.ttf);
+}
+
+ul {
+	border: 4px solid white;
+	list-style-type: square;
+}
+
+#name {
+	width: 150;
+}
+
+h1 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 36;
+}
+
+button {
+	border: 4px solid white;
+	margin: 4px;
+}
+
+input {
+	border: 4px solid white;
+	margin: 4px;
+}
+
+.center {
+	position:absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#game {
+	visibility: hidden;
 }
 
 #canvas {
-	visibility: hidden;
-	position: absolute;
-	top: 10;
-	left: 10;
-	width: 1280;
-	height: 720;
-	border: 1px solid white;
-<<<<<<< HEAD
+	width: 1280px;
+	height: 720px;
+	border: 16px solid white;
+	z-index: -100;
 }
-=======
-}
->>>>>>> master
