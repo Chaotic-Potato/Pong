@@ -35,7 +35,7 @@ var Client = {
 						data.forEach(function(a){
 							if (a != c.name) {
 								var newelem = document.createElement("li")
-								newelem.innerHTML = "<button onclick = \"c.pair('" + a + "')\">" + a + "</button>"
+								newelem.innerHTML = "<button onclick = \"c.pairMessage('" + a + "')\">" + a + "</button>"
 								lobbyList.appendChild(newelem)
 							}
 						})
@@ -83,7 +83,7 @@ var Client = {
 		c.pairSend("move", newy)
 		c.y = newy
 	},
-	pair: function(name){
+	pairMessage: function(name){
 		c.send('pair',name)
 		c.move(c.y)//Update initial position
 	}
