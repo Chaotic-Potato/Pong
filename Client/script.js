@@ -29,9 +29,9 @@ var Client = {
 						var actions = {
 							move: function(data){c.pair.y = data},
 							ball: function(data){
-								ball.y     = data.newball.y
-								ball.x     = data.newball.x
-								ball.angle = data.newball.angle
+								c.ball.y     = data.newball.y
+								c.ball.x     = data.newball.x
+								c.ball.angle = data.newball.angle
 								if(data.type = "hit"){
 									//Play sound
 								}
@@ -96,14 +96,14 @@ var Client = {
 		c.y = newy
 	},
 	sendBall: function(){
-		c.pairSend("ball",c.ball)
+		c.pairSend("ball",{newball: c.ball})
 	},
 	pairMessage: function(name){
 		c.send('pair',name)
 		c.move(c.y)//Update initial position
 	},
 	moveBall: function() {
-		if (c.ball.y < 1 || c.ball.y > 669) {
+		if ((c.ball.y < 1 && c.ball.angle > 0 && c.ball.angle < 180) || (c.ball.y > 669 && c.ball.angle < 360 && c.ball.angle > 180)) {
 			c.ball.angle = (360 - c.ball.angle)
 			c.sendBall()
 		}
