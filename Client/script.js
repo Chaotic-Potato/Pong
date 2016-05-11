@@ -1,5 +1,6 @@
 var Client = {
-	pair: {y:260, name: ""},
+	pair: {y:260, name: "", score: 0},
+	score: 0,
   ball: {x: 615, y: 335, angle: 0},
 	tickRate: 100,
 	y: 260,
@@ -47,8 +48,16 @@ var Client = {
 						})
 					},
 					paired: function(data){
+						c.pair.name = data
 						c.move(c.y)
 						document.getElementById("lobby").style.visibility = "hidden"
+					},
+					ball: function(data) {
+						console.log(data)
+						c.ball = data[0]
+						if (data[1]) {
+							c.score++
+						}
 					}
 				}
 				if (typeFunc[m.type]) {typeFunc[m.type](m.data)}
@@ -62,7 +71,7 @@ var Client = {
 		}
 	},
 	send: function(t, m) {
-		console.log("Sending Message: (" + m + " :: " + t + ")")
+		console.log("Sending Message: (" + t + " :: " + m + ")")
 		c.sock.send(JSON.stringify({type : t, data : m}))
 	},
 	//Nest an extra layer when we pass
@@ -70,11 +79,12 @@ var Client = {
 		c.send("pass", {type: t, data: m})
 	},
 	tick: function() {
-		c.moveBall()
+		if (c.pair.name != "") {
+			c.moveBall()
+		}
 		r.tick()
 		c.processMove()
-		c.moveBall()
-		//c.checkHit()
+		c.checkHit()
 	},
 	processMove: function(){
 		if(c.keys.w && !c.keys.s && c.y > 2){c.move(c.y - 3)}
@@ -94,14 +104,28 @@ var Client = {
 	},
 	pairMessage: function(name){
 		c.send('pair',name)
+		c.pair.name = name
+		c.updateBall()
 		c.move(c.y)//Update initial position
 	},
 	moveBall: function() {
+		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI)
+		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI)
+	},
+	checkHit: function() {
 		if (c.ball.y < 1 || c.ball.y > 669) {
 			c.ball.angle = (360 - c.ball.angle)
 		}
-		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI)
-		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI)
+		if (c.ball.x < 1) {
+			c.ball.x = 640
+			c.ball.y = 360
+			c.ball.angle = Math.round(Math.random() * 90 + 135)
+			c.pair.score++
+			c.updateBall(true)
+		}
+	},
+	updateBall: function(scored) {
+		c.pairSend("ball", [{x : 1230 - c.ball.x, y : c.ball.y, angle : (540 - c.ball.angle) % 360}, scored])
 	}
 }
 
@@ -113,7 +137,14 @@ var Render = {
 		r.ctx.fillStyle = "white"
 		r.ctx.fillRect(100, c.y, 50, 200)
 		r.ctx.fillRect(1130, c.pair.y, 50, 200)
-		r.ctx.fillRect(c.ball.x, c.ball.y, 50, 50)
+		r.ctx.font = "64px pixel"
+		r.ctx.textAlign = "center"
+		r.ctx.strokeStyle = "white"
+		r.ctx.fillText(c.score, 320, 100)
+		r.ctx.fillText(c.pair.score, 960, 100)
+		if (c.pair.name != "") {
+			r.ctx.fillRect(c.ball.x, c.ball.y, 50, 50)
+		}
 	}
 }
 
