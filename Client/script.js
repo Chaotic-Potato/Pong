@@ -57,6 +57,7 @@ var Client = {
 						document.getElementById("lobby").style.visibility = "hidden"
 					},
 					ball: function(data) {
+						console.log("b")
 						console.log(data)
 						c.ball = data[0]
 						if (data[1]) {
@@ -106,9 +107,6 @@ var Client = {
 		c.pairSend("move", newy)
 		c.y = newy
 	},
-	sendBall: function(){
-		c.pairSend("ball",{newball: c.ball})
-	},
 	pairMessage: function(name){
 		c.send('pair',name)
 		c.pair.name = name
@@ -122,7 +120,6 @@ var Client = {
 	checkHit: function() {
 		if (c.ball.y < 1 || c.ball.y > 669) {
 			c.ball.angle = (360 - c.ball.angle)
-			c.sendBall()
 		}
 		if (c.ball.x < 1) {
 			c.ball.x = 640
