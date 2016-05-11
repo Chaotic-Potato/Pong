@@ -28,9 +28,13 @@ var Client = {
           pairmessage: function(data){
             var actions = {
               move: function(data){c.pair.y = data},
-              ballhit: function(data){
-                ball.y = data.y
-                ball.angle = data.angle
+              ball: function(data){
+                ball.y     = data.newball.y
+                ball.x     = data.newball.x
+                ball.angle = data.newball.angle
+                if(data.type = "hit"){
+                  //Play sound
+                }
               }
             }
             actions[data.type](data.data)
@@ -74,7 +78,6 @@ var Client = {
 		r.tick()
 		c.processMove()
 		c.moveBall()
-		//c.checkHit()
 	},
 	processMove: function(){
 		if(c.keys.w && !c.keys.s && c.y > 2){c.move(c.y - 3)}
@@ -102,6 +105,17 @@ var Client = {
 		}
 		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI)
 		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI)
+    //TODO: Check for ball hit
+    //if(c.ball.x < something && c.ball.y < c.y + something2 && c.ball.y > c.y - something3 && c.ball.angle < 270 && c.ball.angle > 90){
+    //  
+    //  Invert angle
+    //  c.ball.angle = something(based on where it hit)
+    //
+    //  Update other client on hit
+    //  c.send("ball", {type: "hit", newball: c.ball})
+    //
+    //  Play a sound
+    //}
 	}
 }
 
