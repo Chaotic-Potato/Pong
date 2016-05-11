@@ -1,6 +1,6 @@
 var Client = {
 	pair: {y:260, name: ""},
-  ball: {x: 615, y: 335, angle: 0},
+	ball: {x: 615, y: 335, angle: 0},
 	tickRate: 100,
 	y: 260,
 	lobby: [],
@@ -25,20 +25,20 @@ var Client = {
 						alert(data)
 						setTimeout(location.reload(true), 3000)
 					},
-          pairmessage: function(data){
-            var actions = {
-              move: function(data){c.pair.y = data},
-              ball: function(data){
-                ball.y     = data.newball.y
-                ball.x     = data.newball.x
-                ball.angle = data.newball.angle
-                if(data.type = "hit"){
-                  //Play sound
-                }
-              }
-            }
-            actions[data.type](data.data)
-          },
+					pairmessage: function(data){
+						var actions = {
+							move: function(data){c.pair.y = data},
+							ball: function(data){
+								ball.y     = data.newball.y
+								ball.x     = data.newball.x
+								ball.angle = data.newball.angle
+								if(data.type = "hit"){
+									//Play sound
+								}
+							}
+						}
+						actions[data.type](data.data)
+					},
 					lobby: function(data){
 						var lobbyList = document.getElementById("lobby")
 						lobbyList.innerHTML = "<span>PLAYERS</span>"
@@ -95,6 +95,9 @@ var Client = {
 		c.pairSend("move", newy)
 		c.y = newy
 	},
+	sendBall: function(){
+		c.pairSend("ball",c.ball)
+	},
 	pairMessage: function(name){
 		c.send('pair',name)
 		c.move(c.y)//Update initial position
@@ -102,20 +105,22 @@ var Client = {
 	moveBall: function() {
 		if (c.ball.y < 1 || c.ball.y > 669) {
 			c.ball.angle = (360 - c.ball.angle)
+			c.sendBall()
 		}
+		//Update position
 		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI)
 		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI)
-    //TODO: Check for ball hit
-    //if(c.ball.x < something && c.ball.y < c.y + something2 && c.ball.y > c.y - something3 && c.ball.angle < 270 && c.ball.angle > 90){
-    //  
-    //  Invert angle
-    //  c.ball.angle = something(based on where it hit)
-    //
-    //  Update other client on hit
-    //  c.send("ball", {type: "hit", newball: c.ball})
-    //
-    //  Play a sound
-    //}
+		//TODO: Check for ball hit
+		//if(c.ball.x < something && c.ball.y < c.y + something2 && c.ball.y > c.y - something3 && c.ball.angle < 270 && c.ball.angle > 90){
+		//	
+		//	Invert angle
+		//	c.ball.angle = something(based on where it hit)
+		//
+		//	Update other client on hit
+		//	c.send("ball", {type: "hit", newball: c.ball})
+		//
+		//	Play a sound
+		//}
 	}
 }
 
