@@ -26,16 +26,20 @@ var Client = {
 						alert(data)
 						setTimeout(location.reload(true), 3000)
 					},
-          pairmessage: function(data){
-            var actions = {
-              move: function(data){c.pair.y = data},
-              ballhit: function(data){
-                ball.y = data.y
-                ball.angle = data.angle
-              }
-            }
-            actions[data.type](data.data)
-          },
+					pairmessage: function(data){
+						var actions = {
+							move: function(data){c.pair.y = data},
+							ball: function(data){
+								c.ball.y     = data.newball.y
+								c.ball.x     = data.newball.x
+								c.ball.angle = data.newball.angle
+								if(data.type = "hit"){
+									//Play sound
+								}
+							}
+						}
+						actions[data.type](data.data)
+					},
 					lobby: function(data){
 						var lobbyList = document.getElementById("lobby")
 						lobbyList.innerHTML = "<span>PLAYERS</span>"
@@ -102,6 +106,9 @@ var Client = {
 		c.pairSend("move", newy)
 		c.y = newy
 	},
+	sendBall: function(){
+		c.pairSend("ball",{newball: c.ball})
+	},
 	pairMessage: function(name){
 		c.send('pair',name)
 		c.pair.name = name
@@ -115,6 +122,7 @@ var Client = {
 	checkHit: function() {
 		if (c.ball.y < 1 || c.ball.y > 669) {
 			c.ball.angle = (360 - c.ball.angle)
+			c.sendBall()
 		}
 		if (c.ball.x < 1) {
 			c.ball.x = 640
@@ -126,6 +134,18 @@ var Client = {
 	},
 	updateBall: function(scored) {
 		c.pairSend("ball", [{x : 1230 - c.ball.x, y : c.ball.y, angle : (540 - c.ball.angle) % 360}, scored])
+		//Update position
+		//TODO: Check for ball hit
+		//if(c.ball.x < something && c.ball.y < c.y + something2 && c.ball.y > c.y - something3 && c.ball.angle < 270 && c.ball.angle > 90){
+		//	
+		//	Invert angle
+		//	c.ball.angle = something(based on where it hit)
+		//
+		//	Update other client on hit
+		//	c.send("ball", {type: "hit", newball: c.ball})
+		//
+		//	Play a sound
+		//}
 	}
 }
 
