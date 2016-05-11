@@ -89,18 +89,7 @@ var Server = {
 		}
 		return null
 	},
-	tick: function() {
-		s.clients.forEach(function(a){
-			if (a.keys.w && !a.keys.s && a.y > 0) {
-				a.y--
-				console.log(a.y)
-			}
-			if (!a.keys.w && a.keys.s && a.y < 520) {
-				a.y++
-				console.log(a.y)
-			}
-		})
-	}
+	tick: function() {}
 }
 
 function decode(string) {
