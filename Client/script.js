@@ -1,6 +1,6 @@
 var Client = {
 	pair: {y:260, name: ""},
-  ball: {x: 0, y: 0, angle: 0},
+  ball: {x: 615, y: 335, angle: 0},
 	tickRate: 100,
 	y: 260,
 	lobby: [],
@@ -66,6 +66,7 @@ var Client = {
 		c.send("pass", {type: t, data: m})
 	},
 	tick: function() {
+		c.moveBall()
 		r.tick()
 		c.processMove()
 	},
@@ -88,6 +89,10 @@ var Client = {
 	pairMessage: function(name){
 		c.send('pair',name)
 		c.move(c.y)//Update initial position
+	},
+	moveBall: function() {
+		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI)
+		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI)
 	}
 }
 
@@ -99,6 +104,7 @@ var Render = {
 		r.ctx.fillStyle = "white"
 		r.ctx.fillRect(100, c.y, 50, 200)
 		r.ctx.fillRect(1130, c.pair.y, 50, 200)
+		r.ctx.fillRect(c.ball.x, c.ball.y, 50, 50)
 	}
 }
 
