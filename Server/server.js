@@ -34,10 +34,13 @@ var Server = {
 							s.send(con, "FatalError", "Your Username was invalid!")
 						}
 					},
-					pass: function(forwardMessage, con){
+					pass: function(data, con){
+            var forwardMessage = {}
+            forwardMessage.data = data.data
+            forwardMessage.type = data.type
 						s.clients.forEach(function(a){
 							if(a.name == con.pair){
-								s.send(a, forwardMessage.type, forwardMessage.data)
+								s.send(a, "pairMessage", forwardMessage)
 							}
 						})
 					},

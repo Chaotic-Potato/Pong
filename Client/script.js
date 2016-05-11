@@ -23,9 +23,12 @@ var Client = {
 						alert(data)
 						setTimeout(location.reload(true), 3000)
 					},
-					move: function(data){
-						c.pair.y = data
-					},
+          pairmessage: function(data){
+            var actions = {
+              move: function(data){c.pair.y = data}
+            }
+            actions[data.type](data.data)
+          },
 					lobby: function(data){
 						var lobbyList = document.getElementById("lobby")
 						lobbyList.innerHTML = "<span>PLAYERS</span>"
@@ -42,9 +45,7 @@ var Client = {
 						document.getElementById("lobby").style.visibility = "hidden"
 					}
 				}
-				if (typeFunc[m.type]) {
-					typeFunc[m.type](m.data)
-				}
+				if (typeFunc[m.type]) {typeFunc[m.type](m.data)}
 			}
 			c.sock.onopen = function() {
 				c.send("connect", c.name)
