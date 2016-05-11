@@ -14,11 +14,6 @@ var Server = {
 		s.wsServer.on('request', function(r) {
 			var con = r.accept('echo-protocol', r.origin)
 			s.clients.push(con)
-			con.keys = {
-				w: false,
-				s: false
-			}
-			con.y = 260
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
 				m.type = m.type.toLowerCase()
