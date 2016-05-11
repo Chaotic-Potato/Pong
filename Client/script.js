@@ -27,7 +27,11 @@ var Client = {
 					},
           pairmessage: function(data){
             var actions = {
-              move: function(data){c.pair.y = data}
+              move: function(data){c.pair.y = data},
+              ballhit: function(data){
+                ball.y = data.y
+                ball.angle = data.angle
+              }
             }
             actions[data.type](data.data)
           },
@@ -69,6 +73,8 @@ var Client = {
 		c.moveBall()
 		r.tick()
 		c.processMove()
+    c.moveBall()
+    c.checkHit()
 	},
 	processMove: function(){
 		if(c.keys.w && !c.keys.s && c.y > 2){c.move(c.y - 3)}
