@@ -1,5 +1,6 @@
 var Client = {
 	pair: {y:260, name: ""},
+  ball: {x: 0, y: 0, angle: 0},
 	tickRate: 100,
 	y: 260,
 	lobby: [],
