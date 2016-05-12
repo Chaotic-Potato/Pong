@@ -30,11 +30,11 @@ var Client = {
 						var actions = {
 							move: function(data){c.pair.y = data},
 							ball: function(data){
-								c.ball.y     = data.newball.y
-								c.ball.x     = data.newball.x
-								c.ball.angle = data.newball.angle
-								if(data.type = "hit"){
-									//Play sound
+								console.log("b")
+								console.log(data)
+								c.ball = data[0]
+								if (data[1]) {
+									c.score++
 								}
 							}
 						}
@@ -55,14 +55,6 @@ var Client = {
 						c.pair.name = data
 						c.move(c.y)
 						document.getElementById("lobby").style.visibility = "hidden"
-					},
-					ball: function(data) {
-						console.log("b")
-						console.log(data)
-						c.ball = data[0]
-						if (data[1]) {
-							c.score++
-						}
 					}
 				}
 				if (typeFunc[m.type]) {typeFunc[m.type](m.data)}
