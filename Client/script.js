@@ -110,9 +110,9 @@ var Client = {
 			c.ball.angle = (360 - c.ball.angle)
 		}
 		if (c.ball.x < 1) {
-			c.ball.x = 640
+			c.ball.x = 320
 			c.ball.y = 360
-			c.ball.angle = Math.round(Math.random() * 90 + 135)
+			c.ball.angle = Math.round(Math.random() * 90 + 315)
 			c.pair.score++
 			c.updateBall(true)
 		}
