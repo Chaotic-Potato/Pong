@@ -116,6 +116,11 @@ var Client = {
 			c.pair.score++
 			c.updateBall(true)
 		}
+		if (c.ball.x > 100 && c.ball.x < 150 && c.ball.y > c.y - 50 && c.ball.y < c.y + 200 && c.ball.angle > 90 && c.ball.angle < 270) {
+			c.ball.angle = ((160 * ((c.ball.y - c.y + 50) / 250) - 80) * -1 + 360) % 360
+			console.log((160 * ((c.ball.y - c.y + 50) / 250) - 80) * -1 + 360)
+			c.updateBall(false)
+		}
 	},
 	updateBall: function(scored) {
 		c.pairSend("ball", [{x : 1230 - c.ball.x, y : c.ball.y, angle : (540 - c.ball.angle) % 360}, scored])
