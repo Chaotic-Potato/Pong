@@ -1,7 +1,7 @@
 var Client = {
 	pair: {y:260, name: "", score: 0},
 	score: 0,
-  ball: {x: 615, y: 335, angle: 0},
+	ball: {x: 615, y: 335, angle: 0},
 	tickRate: 100,
 	y: 260,
 	lobby: [],
@@ -22,10 +22,6 @@ var Client = {
 				m.type = m.type.toLowerCase()
 				console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
-					fatalerror: function(data){
-						alert(data)
-						setTimeout(location.reload(true), 3000)
-					},
 					pairmessage: function(data){
 						var actions = {
 							move: function(data){c.pair.y = data},
@@ -123,18 +119,6 @@ var Client = {
 	},
 	updateBall: function(scored) {
 		c.pairSend("ball", [{x : 1230 - c.ball.x, y : c.ball.y, angle : (540 - c.ball.angle) % 360}, scored])
-		//Update position
-		//TODO: Check for ball hit
-		//if(c.ball.x < something && c.ball.y < c.y + something2 && c.ball.y > c.y - something3 && c.ball.angle < 270 && c.ball.angle > 90){
-		//	
-		//	Invert angle
-		//	c.ball.angle = something(based on where it hit)
-		//
-		//	Update other client on hit
-		//	c.send("ball", {type: "hit", newball: c.ball})
-		//
-		//	Play a sound
-		//}
 	}
 }
 
@@ -144,14 +128,18 @@ var Render = {
 	tick: function() {
 		r.ctx.clearRect(0, 0, 1280, 720)
 		r.ctx.fillStyle = "white"
+		//Local bumper
 		r.ctx.fillRect(100, c.y, 50, 200)
+		//Remote bumper
 		r.ctx.fillRect(1130, c.pair.y, 50, 200)
+
 		r.ctx.font = "64px pixel"
 		r.ctx.textAlign = "center"
 		r.ctx.strokeStyle = "white"
 		r.ctx.fillText(c.score, 320, 100)
 		r.ctx.fillText(c.pair.score, 960, 100)
 		if (c.pair.name != "") {
+			//Ball
 			r.ctx.fillRect(c.ball.x, c.ball.y, 50, 50)
 		}
 	}

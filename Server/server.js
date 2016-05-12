@@ -29,9 +29,9 @@ var Server = {
 						}
 					},
 					pass: function(data, con){
-            var forwardMessage = {}
-            forwardMessage.data = data.data
-            forwardMessage.type = data.type
+						var forwardMessage = {}
+						forwardMessage.data = data.data
+						forwardMessage.type = data.type
 						s.clients.forEach(function(a){
 							if(a.name == con.pair){
 								s.send(a, "pairMessage", forwardMessage)
@@ -47,7 +47,7 @@ var Server = {
 							partner.pair = con.name 
 							s.send(partner,"paired",con.name)
 							s.send(con,"paired",partner.name)
-              s.updateLobby()
+							s.updateLobby()
 						}
 					}
 				}
