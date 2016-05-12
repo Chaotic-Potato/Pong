@@ -23,6 +23,12 @@
   - Do NOT send pair message back or you will infinitely loop
 
 ##Client -> Client
+- PairMessage
+  - Data is the actual message :: {data: x, type: y}
+  - Type will be one of the messages below:
 - Move
   - Client has moved to a new y-value
   - Data is new y-value
+- BallHit
+  - Client has Hit the ball 
+  - Data is {y: new ball y, angle: new ball angle}

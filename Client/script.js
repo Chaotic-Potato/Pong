@@ -1,5 +1,7 @@
 var Client = {
-	pair: {y:260, name: ""},
+	pair: {y:260, name: "", score: 0},
+	score: 0,
+	ball: {x: 615, y: 335, angle: 0},
 	tickRate: 100,
 	y: 260,
 	lobby: [],
@@ -14,17 +16,25 @@ var Client = {
 			c.name = get("name").value
 			get("connectContainer").style.visibility = "hidden"
 			get("game").style.visibility = "visible"
+			get("lobby").style.visibility = "visible"
 			c.sock.onmessage = function (evt) { 
 				var m = JSON.parse(evt.data)
 				m.type = m.type.toLowerCase()
 				console.log("Got Message: (" + m.data + " :: " + m.type + ")")
 				var typeFunc = {
-					fatalerror: function(data){
-						alert(data)
-						setTimeout(location.reload(true), 3000)
-					},
-					move: function(data){
-						c.pair.y = data
+					pairmessage: function(data){
+						var actions = {
+							move: function(data){c.pair.y = data},
+							ball: function(data){
+								console.log("b")
+								console.log(data)
+								c.ball = data[0]
+								if (data[1]) {
+									c.score++
+								}
+							}
+						}
+						actions[data.type](data.data)
 					},
 					lobby: function(data){
 						var lobbyList = document.getElementById("lobby")
@@ -32,19 +42,18 @@ var Client = {
 						data.forEach(function(a){
 							if (a != c.name) {
 								var newelem = document.createElement("li")
-								newelem.innerHTML = "<button onclick = \"c.pair('" + a + "')\">" + a + "</button>"
+								newelem.innerHTML = "<button onclick = \"c.pairMessage('" + a + "')\">" + a + "</button>"
 								lobbyList.appendChild(newelem)
 							}
 						})
 					},
 					paired: function(data){
+						c.pair.name = data
 						c.move(c.y)
 						document.getElementById("lobby").style.visibility = "hidden"
 					}
 				}
-				if (typeFunc[m.type]) {
-					typeFunc[m.type](m.data)
-				}
+				if (typeFunc[m.type]) {typeFunc[m.type](m.data)}
 			}
 			c.sock.onopen = function() {
 				c.send("connect", c.name)
@@ -63,8 +72,12 @@ var Client = {
 		c.send("pass", {type: t, data: m})
 	},
 	tick: function() {
+		if (c.pair.name != "") {
+			c.moveBall()
+		}
 		r.tick()
 		c.processMove()
+		c.checkHit()
 	},
 	processMove: function(){
 		if(c.keys.w && !c.keys.s && c.y > 2){c.move(c.y - 3)}
@@ -82,9 +95,34 @@ var Client = {
 		c.pairSend("move", newy)
 		c.y = newy
 	},
-	pair: function(name){
+	pairMessage: function(name){
 		c.send('pair',name)
+		c.pair.name = name
+		c.updateBall()
 		c.move(c.y)//Update initial position
+	},
+	moveBall: function() {
+		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI) * 4
+		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI) * 4
+	},
+	checkHit: function() {
+		if (c.ball.y < 1 || c.ball.y > 669) {
+			c.ball.angle = (360 - c.ball.angle)
+		}
+		if (c.ball.x < 1) {
+			c.ball.x = 640
+			c.ball.y = 360
+			c.ball.angle = Math.round(Math.random() * 90 + 135)
+			c.pair.score++
+			c.updateBall(true)
+		}
+		if (c.ball.x > 100 && c.ball.x < 150 && c.ball.y > c.y - 50 && c.ball.y < c.y + 200 && c.ball.angle > 90 && c.ball.angle < 270) {
+			c.ball.angle = ((160 * ((c.ball.y - c.y + 50) / 250) - 80) * -1 + 360) % 360
+			c.updateBall(false)
+		}
+	},
+	updateBall: function(scored) {
+		c.pairSend("ball", [{x : 1230 - c.ball.x, y : c.ball.y, angle : (540 - c.ball.angle) % 360}, scored])
 	}
 }
 
@@ -94,8 +132,20 @@ var Render = {
 	tick: function() {
 		r.ctx.clearRect(0, 0, 1280, 720)
 		r.ctx.fillStyle = "white"
+		//Local bumper
 		r.ctx.fillRect(100, c.y, 50, 200)
+		//Remote bumper
 		r.ctx.fillRect(1130, c.pair.y, 50, 200)
+
+		r.ctx.font = "64px pixel"
+		r.ctx.textAlign = "center"
+		r.ctx.strokeStyle = "white"
+		r.ctx.fillText(c.score, 320, 100)
+		r.ctx.fillText(c.pair.score, 960, 100)
+		if (c.pair.name != "") {
+			//Ball
+			r.ctx.fillRect(c.ball.x, c.ball.y, 50, 50)
+		}
 	}
 }
 

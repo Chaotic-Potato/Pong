@@ -3,7 +3,6 @@ var Server = {
 	clients: [], 
 	tickRate: 100,
 	init: function() {
-		s.loop = setInterval(s.tick, (1000 / s.tickRate))
 		s.WebSocketServer = require('websocket').server
 		s.http = require("http") 
 		s.server = s.http.createServer(function(res, req){}).listen(7664)
@@ -14,11 +13,6 @@ var Server = {
 		s.wsServer.on('request', function(r) {
 			var con = r.accept('echo-protocol', r.origin)
 			s.clients.push(con)
-			con.keys = {
-				w: false,
-				s: false
-			}
-			con.y = 260
 			con.on('message', function(message) {
 				var m = JSON.parse(message.utf8Data)
 				m.type = m.type.toLowerCase()
@@ -34,10 +28,13 @@ var Server = {
 							s.send(con, "FatalError", "Your Username was invalid!")
 						}
 					},
-					pass: function(forwardMessage, con){
+					pass: function(data, con){
+						var forwardMessage = {}
+						forwardMessage.data = data.data
+						forwardMessage.type = data.type
 						s.clients.forEach(function(a){
 							if(a.name == con.pair){
-								s.send(a, forwardMessage.type, forwardMessage.data)
+								s.send(a, "pairMessage", forwardMessage)
 							}
 						})
 					},
@@ -50,7 +47,7 @@ var Server = {
 							partner.pair = con.name 
 							s.send(partner,"paired",con.name)
 							s.send(con,"paired",partner.name)
-              s.updateLobby()
+							s.updateLobby()
 						}
 					}
 				}
@@ -90,18 +87,6 @@ var Server = {
 			}
 		}
 		return null
-	},
-	tick: function() {
-		s.clients.forEach(function(a){
-			if (a.keys.w && !a.keys.s && a.y > 0) {
-				a.y--
-				console.log(a.y)
-			}
-			if (!a.keys.w && a.keys.s && a.y < 520) {
-				a.y++
-				console.log(a.y)
-			}
-		})
 	}
 }
 
