@@ -102,8 +102,8 @@ var Client = {
 		c.move(c.y)//Update initial position
 	},
 	moveBall: function() {
-		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI) * 3.5
-		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI) * 3.5
+		c.ball.x += Math.cos(c.ball.angle / 180 * Math.PI) * 4
+		c.ball.y -= Math.sin(c.ball.angle / 180 * Math.PI) * 4
 	},
 	checkHit: function() {
 		if (c.ball.y < 1 || c.ball.y > 669) {
