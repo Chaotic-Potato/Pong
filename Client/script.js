@@ -68,7 +68,7 @@ var Client = {
 		}
 	},
 	send: function(t, m) {
-		console.log("Sending Message: (" + t + " :: " + m + ")")
+		console.log("Sending Message: (" + m + " :: " + t + ")")
 		c.sock.send(JSON.stringify({type : t, data : m}))
 	},
 	//Nest an extra layer when we pass
