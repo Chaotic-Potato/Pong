@@ -118,7 +118,6 @@ var Client = {
 		}
 		if (c.ball.x > 100 && c.ball.x < 150 && c.ball.y > c.y - 50 && c.ball.y < c.y + 200 && c.ball.angle > 90 && c.ball.angle < 270) {
 			c.ball.angle = ((160 * ((c.ball.y - c.y + 50) / 250) - 80) * -1 + 360) % 360
-			console.log((160 * ((c.ball.y - c.y + 50) / 250) - 80) * -1 + 360)
 			c.updateBall(false)
 		}
 	},
